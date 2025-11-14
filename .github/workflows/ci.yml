@@ -26,7 +26,7 @@ jobs:
           dotnet-version: ${{ matrix.version }}
 
       - name: Build Solution
-        working-directory: ShoppingList.Web
+        working-directory: ShoppingList
         run: | 
           dotnet build
 
