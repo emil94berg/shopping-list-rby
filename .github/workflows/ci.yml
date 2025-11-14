@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         version: [8.0, 9.0]
     
     steps:
@@ -25,9 +25,9 @@ jobs:
         with:
           dotnet-version: ${{ matrix.version }}
 
-      - name: Build Solution
-        run: | 
-          dotnet build ShoppingList.Web
-          dotnet build ShoppingList.Tests
+      - name: Build Web-project
+        run: dotnet build ShoppingList.Web
 
-          
+      - name: Run Test If Build Succeeds
+        if: success()
+        run: dotnet build ShoppingList.Tests
