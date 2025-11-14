@@ -25,9 +25,11 @@ jobs:
         with:
           dotnet-version: ${{ matrix.version }}
 
-      - name: Build Web-project
-        run: dotnet build ShoppingList.Web
+      - name: Build Web & Test Projects
+        run: |
+          dotnet build ShoppingList.Web
+          dotnet build ShoppingList.Tests
 
       - name: Run Test If Build Succeeds
         if: success()
-        run: dotnet build ShoppingList.Tests
+        run: dotnet run --project ShoppingList.Tests/ShoppingList.Tests.csproj
