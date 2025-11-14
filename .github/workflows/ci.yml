@@ -30,4 +30,4 @@ jobs:
 
       - name: Run Test If Build Succeeds
         if: success()
-        run: dotnet run --project ShoppingList.Tests/ShoppingList.Tests.csproj
+        run: dotnet test
