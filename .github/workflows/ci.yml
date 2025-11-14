@@ -21,10 +21,10 @@ jobs:
         run: |
           echo "Triggered by: ${{ github.event_name }}"
           echo "Author: ${{ github.actor }}"
-          if [ ${{ github.event_name }} == 'pull_request' ]; then
+          if [ ${{ github.event_name }} == "pull_request" ]; then
             echo "Pr-number: ${{ github.event.pull_request.number }}"
             echo "Branch: ${{ github.ref }}"
-          if [ ${{ github.event_name }} == 'push']; then
+          if [ ${{ github.event_name }} == "push" ]; then
             echo "Commit message: ${{ github.event.head_message }}"
           
       - name: Checkout code
