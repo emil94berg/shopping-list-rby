@@ -23,8 +23,8 @@ jobs:
           echo "Author: ${{ github.actor }}"
           if [ ${{ github.event_name }} == 'pull_request' ]; then
             echo "Pr-number: ${{ github.event.pull_request.number }}"
+            echo "Branch: ${{ github.event.pull_request.base.ref }}"
           elif [ ${{ github.event_name }} == 'push' ]; then
-            echo "Branch: ${{ github.ref }}"
             echo "Commit message: ${{ github.event.head_commit.message }}"
           fi
           
