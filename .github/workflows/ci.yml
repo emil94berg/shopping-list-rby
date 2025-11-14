@@ -13,14 +13,32 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         version: [8.0, 9.0]
     
     steps:
+      - name: Run-time Context
+        run: |
+          echo "Triggered by: ${{ github.event_name }}"
+          echo "Author: ${{ github.actor }}"
+          if [ ${{ github.event_name }} == 'pull_request' ]; then
+            echo "Pr-number: ${{ github.event.pull_request.number }}"
+            echo "Branch: ${{ github.event.pull_request.base.ref }}"
+          elif [ ${{ github.event_name }} == 'push' ]; then
+            echo "Commit message: ${{ github.event.head_commit.message }}"
+          fi
+          
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+    
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.0.0
         with:
           dotnet-version: ${{ matrix.version }}
 
       - name: Build Solution
-        working-directory: ./Lab
+        run: dotnet build
+
+      - name: Run Test If Build Succeeds
+        if: success()
+        run: dotnet test
