@@ -28,6 +28,6 @@ jobs:
       - name: Build Solution
         run: | 
           dotnet build ShoppingList.Web
-          dotnet build ShoppingList.Test
+          dotnet build ShoppingList.Tests
 
           
