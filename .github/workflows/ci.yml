@@ -25,7 +25,7 @@ jobs:
             echo "Pr-number: ${{ github.event.pull_request.number }}"
             echo "Branch: ${{ github.ref }}"
           elif [ ${{ github.event_name }} == 'push' ]; then
-            echo "Commit message: ${{ github.event.head_message }}"
+            echo "Commit message: ${{ github.event.workflow_run.head_commit.message }}"
           fi
           
       - name: Checkout code
