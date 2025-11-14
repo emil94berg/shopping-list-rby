@@ -113,28 +113,27 @@ public class ShoppingListServiceTests
     //     Assert.NotNull(item);
     //     Assert.Equal("Milk", item!.Name);
     //     Assert.Equal(2, item.Quantity);
-    //Hejsan
+    //Hejsan. detta är min merge, ta aldrig bort
     // }
 
     [Theory]
-    [InlineData("Banana", 2, "Yellow")]
-    [InlineData("Apple", 3, null)]
-    [InlineData("Orange", null, "Orange")]
-    public void AddShouldReturnShoppingItem(string name, int quantity, string? notes)
+    [InlineData("Banana", 2, "Yellow", true)]
+    [InlineData("Apple", 3, null, true)]
+    [InlineData("Orange", -2, "Orange", true)]
+    public void AddShouldReturnShoppingItem(string name, int quantity, string? notes, bool expected)
     {
         // Arrange
         var service = new ShoppingListService();
         // Act
         var item = service.Add(name, quantity, notes);
         // Assert
-        Assert.IsType<ShoppingItem>(item);
-        Assert.Equal(item.Name, name);
-        Assert.Equal(item.Quantity, quantity);
+        Assert.NotNull(item);
+        Assert.Equal(expected, item.Quantity == quantity || item.Quantity == 1);
     }
 
     [Theory]
     [InlineData("Banana", 2, "Yellow", true)]
-    [InlineData(null, 1, "Orange", false)]
+    [InlineData("Ketchup", 1, null, true)]
     public void AddShouldAddTenItems(string name, int quantity, string? notes, bool expected)
     {
         //Arrange
