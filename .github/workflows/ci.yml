@@ -23,6 +23,6 @@ jobs:
           dotnet-version: ${{ matrix.version }}
 
       - name: Build Solution
-        run: dotnet build ShoppingList
+        run: dotnet build ShoppingList.Web
 
           
