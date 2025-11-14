@@ -1,8 +1,10 @@
-﻿using ShoppingList.Application.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using ShoppingList.Application.Services;
 using ShoppingList.Domain.Models;
 using Xunit;
 
 namespace ShoppingList.Tests;
+
 
 /// <summary>
 /// Unit tests for ShoppingListService.
@@ -112,5 +114,120 @@ public class ShoppingListServiceTests
     //     Assert.Equal("Milk", item!.Name);
     //     Assert.Equal(2, item.Quantity);
     // }
+
+    [Theory]
+    [InlineData("Banana", 2, "Yellow")]
+    [InlineData("Apple", 3, null)]
+    [InlineData("Orange", null, "Orange")]
+    public void AddShouldReturnShoppingItem(string name, int quantity, string? notes)
+    {
+        // Arrange
+        var service = new ShoppingListService();
+        // Act
+        var item = service.Add(name, quantity, notes);
+        // Assert
+        Assert.IsType<ShoppingItem>(item);
+        Assert.Equal(item.Name, name);
+        Assert.Equal(item.Quantity, quantity);
+    }
+
+    [Theory]
+    [InlineData("Banana", 2, "Yellow", true)]
+    [InlineData(null, 1, "Orange", false)]
+    public void AddShouldAddTenItems(string name, int quantity, string? notes, bool expected)
+    {
+        //Arrange
+        var service =  new ShoppingListService();
+        var testArray = new ShoppingItem[10];
+        
+        //Act
+        var item = service.Add(name, quantity, notes);
+        for (int i = 0; i < 10; i++)
+        {
+            testArray[i] = item;
+        }
+        
+        //Assert
+        Assert.Equal(expected, testArray.Length == 10);
+    }
+
+    [Fact]
+    public void GetAllShouldReturnAllItems()
+    {
+        //Arrange
+        var service = new ShoppingListService();
+        var expected = 5;
+        for (int i = 0; i < expected; i++)
+        {
+            service.Add("Banana", 2, "Yellow");
+        }
+        //Act
+        var actual = service.GetAll();
+        int x = 0;
+        foreach (var item in actual)
+        {
+            if (item != null)
+            {
+                x++;
+            }
+        }
+        
+        //Assert
+        Assert.Equal(expected, x);
+    }
+    
+    [Theory]
+    [InlineData("Banana", 2, "Yellow")]
+    [InlineData("Orange", 1, "Orange")]
+    public void GetByIdShouldReturnShoppingItem(string name, int quantity, string? notes)
+    {
+        // Arrange
+        var service = new ShoppingListService();
+        var item = service.Add("Banana", 2, "Yellow");
+        // Act
+        var actual = service.GetById(item.Id);
+        // Assert
+        Assert.Equal(item.Id, actual.Id);
+    }
+    
+    [Fact]
+    public void DeleteShouldDeleteItem()
+    {
+        //Arrange
+        var service = new ShoppingListService();
+        var testArray = new ShoppingItem[5];
+        var expected = true;
+        
+        //Act
+        for (int i = 0; i < 5; i++)
+        {
+            testArray[i] = service.Add("Banana", 2, "Yellow");
+        }
+        
+        var actual = service.Delete(testArray[2].Id);
+        
+        //Assert
+        Assert.Equal(expected, actual);
+    }
+    [Fact]
+    public void SearchShouldReturnSpecifiedItems()
+    {
+        //Arrange
+        var service = new ShoppingListService();
+        var query = "Orange";
+        service.Add("Banana", 2, "Yellow");
+        service.Add("Apple", 3, "Green");
+        service.Add("Orange", 4, "Orange");
+        service.Add("Orange", 7, null);
+        service.Add("Pear", 7, "DarkGreen");
+        service.Add("Pear", 8, "DarkOrange");
+        var expected = 3;
+        //Act
+        var actual = service.Search(query);
+        //Assert
+        Assert.Equal(expected, actual.Count);
+    }
+
+
 }
 

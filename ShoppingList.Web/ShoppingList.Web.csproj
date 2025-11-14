@@ -16,4 +16,8 @@
       <_ContentIncludedByDefault Remove="Infrastructure\Data\shopping-list.json" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Application\Services\" />
+    </ItemGroup>
+
 </Project>
