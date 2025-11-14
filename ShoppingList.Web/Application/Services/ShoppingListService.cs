@@ -44,14 +44,11 @@ public class ShoppingListService : IShoppingListService
             Quantity = quantity,
             Notes = notes
         };
-        if (_items.Length == 0)
+        if (_items.Length == _nextIndex)
         {
             Array.Resize(ref _items, _items.Length + 1);
         }
-        else if (_items.Length == _nextIndex)
-        {
-            Array.Resize(ref _items, _items.Length + 1);
-        }
+      
         _items[_nextIndex] = shoppingItem;
         _nextIndex++;
         return shoppingItem;
@@ -71,18 +68,19 @@ public class ShoppingListService : IShoppingListService
         if(!_items.Any(x => x.Id == id))  return false;
         
         var newItemList = new ShoppingItem[_items.Length];
-        _nextIndex = 0;
+        int index = 0;
 
         foreach (var item in _items)
         {
             if (item.Id != id)
             {
-                newItemList[_nextIndex] = item;
-                _nextIndex++;
+                newItemList[index] = item;
+                index++;
             }
         }
-        
-        
+        _nextIndex = _items.Length - 1;
+        Array.Resize(ref newItemList, newItemList.Length - 1);
+        _items = newItemList;
         return true;
     }
 
@@ -98,18 +96,19 @@ public class ShoppingListService : IShoppingListService
         {
             return _items;
         }
-
-        var filteredItems = new  ShoppingItem[_items.Length];
+        var filteredItems = Array.Empty<ShoppingItem>();
         int index = 0;
         foreach (var item in _items)
         {
             
-            if (item.Name.Contains(query) || item.Notes.Contains(query) && item.Notes != null)
+            if (item.Name.ToLower().Contains(query.ToLower()) || (item.Notes.ToLower().Contains(query.ToLower()) && item.Notes != null))
             {
+                Array.Resize(ref filteredItems, filteredItems.Length + 1);
                 filteredItems[index] =  item;
+                index++;
             }
-            index++;
         }
+        
         return filteredItems;
     }
 
